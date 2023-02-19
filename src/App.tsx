@@ -1,28 +1,48 @@
-import React from "react";
-
 import { Refine } from "@pankod/refine-core";
 import {
-  notificationProvider,
-  Layout,
-  ReadyPage,
-  ErrorComponent,
-} from "@pankod/refine-antd";
-import "@pankod/refine-antd/dist/reset.css";
+    Layout,
+    ReadyPage,
+    ErrorComponent,
+    DarkTheme,
+    CssBaseline,
+    GlobalStyles,
+    ThemeProvider,
+    RefineSnackbarProvider,
+    notificationProvider,
+} from "@pankod/refine-mui";
 
-import dataProvider from "@pankod/refine-simple-rest";
 import routerProvider from "@pankod/refine-react-router-v6";
+import dataProvider from "@pankod/refine-simple-rest";
+import { MuiInferencer } from "@pankod/refine-inferencer/mui";
 
-function App() {
-  return (
-    <Refine
-      dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
-      notificationProvider={notificationProvider}
-      Layout={Layout}
-      ReadyPage={ReadyPage}
-      catchAll={<ErrorComponent />}
-      routerProvider={routerProvider}
-    />
-  );
-}
+const App: React.FC = () => {
+    return (
+        <ThemeProvider theme={DarkTheme}>
+            <CssBaseline />
+            <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
+            <RefineSnackbarProvider>
+                <Refine
+                    routerProvider={routerProvider}
+                    dataProvider={dataProvider(
+                        "https://api.fake-rest.refine.dev",
+                    )}
+                    notificationProvider={notificationProvider}
+                    Layout={Layout}
+                    ReadyPage={ReadyPage}
+                    catchAll={<ErrorComponent />}
+                    resources={[
+                        {
+                            name: "products",
+                            list: MuiInferencer,
+                            show: MuiInferencer,
+                            create: MuiInferencer,
+                            edit: MuiInferencer,
+                        },
+                    ]}
+                />
+            </RefineSnackbarProvider>
+        </ThemeProvider>
+    );
+};
 
 export default App;
